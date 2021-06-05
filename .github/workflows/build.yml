@@ -14,7 +14,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-20.04
+    runs-on: fede2/circuitpython-builder
     steps:
     - name: Dump GitHub context
       env:
@@ -29,16 +29,6 @@ jobs:
       run: |
         git describe --dirty --tags
         echo >>$GITHUB_ENV CP_VERSION=$(git describe --dirty --tags)
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.8
-    - name: Install deps
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y eatmydata
-        sudo eatmydata apt-get install -y gettext librsvg2-bin mingw-w64 latexmk texlive-fonts-recommended texlive-latex-recommended texlive-latex-extra gcc-aarch64-linux-gnu
-        pip install -r requirements-dev.txt
     - name: Versions
       run: |
         gcc --version

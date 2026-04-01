@@ -378,17 +378,6 @@ static void _new_connection(uint16_t conn_handle, bool is_central) {
 
     if (is_central) {
         // Initiate SMP security BEFORE any GATT traffic.
-        // Peripherals like the Valeton GP-5 require the central to start
-        // pairing within the first few connection events. If we send
-        // unencrypted GATT requests (MTU exchange) first, the peripheral
-        // disconnects immediately.
-        //
-        // The MTU exchange is deferred to BLE_GAP_EVENT_ENC_CHANGE in
-        // Connection.c so it only happens AFTER encryption is established.
-
-        // Erase any stale bonding keys for this peer before starting
-        // security. NVS persists across reflashes and stale keys may break
-        // re-encryption if the peer forgot the bond.
         struct ble_gap_conn_desc _desc;
         if (ble_gap_conn_find(conn_handle, &_desc) == 0) {
             ble_store_util_delete_peer(&_desc.peer_id_addr);
